@@ -10,6 +10,9 @@ export default function TimerUI() {
     useTimerTick();
     const { timeLeft, isActive, mode, startTimer, pauseTimer, resetTimer, setMode } = useTimerStore();
 
+    const RADIUS = 45;
+    const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
     const totalTime = mode === 'focus' ? 25 * 60 : mode === 'shortBreak' ? 5 * 60 : 15 * 60;
     const progress = timeLeft / totalTime;
 
@@ -20,8 +23,8 @@ export default function TimerUI() {
     };
 
     const circleVariants = {
-        initial: { strokeDashoffset: 283 },
-        animate: { strokeDashoffset: 283 * (1 - progress) }
+        initial: { strokeDashoffset: CIRCUMFERENCE },
+        animate: { strokeDashoffset: CIRCUMFERENCE * (1 - progress) }
     };
 
     const modes: { id: TimerMode; label: string }[] = [
@@ -58,7 +61,7 @@ export default function TimerUI() {
                         <circle
                             cx="50"
                             cy="50"
-                            r="45"
+                            r={RADIUS}
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="4"
@@ -68,13 +71,13 @@ export default function TimerUI() {
                         <motion.circle
                             cx="50"
                             cy="50"
-                            r="45"
+                            r={RADIUS}
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="4"
                             strokeLinecap="round"
                             className="text-purple-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]"
-                            strokeDasharray="283" // 2 * pi * 45
+                            strokeDasharray={CIRCUMFERENCE} // 2 * pi * 45
                             initial="initial"
                             animate="animate"
                             variants={circleVariants}

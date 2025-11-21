@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { useTimerStore } from '../store/useTimerStore';
 
 export const useTimerTick = () => {
-    const { timeLeft, isActive, mode, tick } = useTimerStore();
+    const { timeLeft, isActive, tick } = useTimerStore();
 
+    // Effect 1: Ticking
     useEffect(() => {
         let interval: NodeJS.Timeout;
 
@@ -11,15 +12,18 @@ export const useTimerTick = () => {
             interval = setInterval(() => {
                 tick();
             }, 1000);
-        } else if (timeLeft === 0 && isActive) {
-            // Timer finished logic handled in store tick check or here
-            // But store tick handles stopping it.
-            // We can add sound playing here if we want to react to it finishing.
-            console.log("Timer finished! Play sound here.");
         }
 
         return () => clearInterval(interval);
     }, [isActive, timeLeft, tick]);
+
+    // Effect 2: Completion
+    useEffect(() => {
+        if (timeLeft === 0 && isActive) {
+            console.log("Timer finished! Play sound here.");
+            tick(); // Ensure store updates isActive to false
+        }
+    }, [timeLeft, isActive, tick]);
 
     useEffect(() => {
         const formatTime = (seconds: number) => {
