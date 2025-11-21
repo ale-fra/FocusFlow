@@ -14,10 +14,11 @@ interface TimerState {
     resetTimer: () => void;
     setMode: (mode: TimerMode) => void;
     tick: () => void;
+    completeTimer: () => void;
     incrementCycles: () => void;
 }
 
-const DURATIONS: Record<TimerMode, number> = {
+export const DURATIONS: Record<TimerMode, number> = {
     focus: 25 * 60,
     shortBreak: 5 * 60,
     longBreak: 15 * 60,
@@ -44,9 +45,14 @@ export const useTimerStore = create<TimerState>()(
                 const { timeLeft, isActive } = get();
                 if (isActive && timeLeft > 0) {
                     set({ timeLeft: timeLeft - 1 });
-                } else if (isActive && timeLeft === 0) {
-                    set({ isActive: false });
                 }
+            },
+            completeTimer: () => {
+                set((state) => ({
+                    isActive: false,
+                    timeLeft: DURATIONS[state.mode],
+                    cycles: state.cycles + 1,
+                }));
             },
             incrementCycles: () => set((state) => ({ cycles: state.cycles + 1 })),
         }),

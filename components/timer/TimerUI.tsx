@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, RotateCcw, Sliders } from 'lucide-react';
-import { useTimerStore, TimerMode } from '@/store/useTimerStore';
+import { useTimerStore, TimerMode, DURATIONS } from '@/store/useTimerStore';
 import { useTimerTick } from '@/hooks/useTimerTick';
 
 export default function TimerUI() {
@@ -13,7 +13,7 @@ export default function TimerUI() {
     const RADIUS = 45;
     const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-    const totalTime = mode === 'focus' ? 25 * 60 : mode === 'shortBreak' ? 5 * 60 : 15 * 60;
+    const totalTime = DURATIONS[mode];
     const progress = timeLeft / totalTime;
 
     const formatTime = (seconds: number) => {
@@ -131,6 +131,7 @@ export default function TimerUI() {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        onClick={() => alert('Settings coming soon')}
                         className="glass-button p-4 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-colors"
                         aria-label="Timer Settings"
                     >
